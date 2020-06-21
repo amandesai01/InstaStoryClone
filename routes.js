@@ -14,11 +14,10 @@ router.post("/createstory", uploader.array("image"), async (req, res) => {
   try {
     const urls = [];
     const files = req.files;
-    console.log(files)
-    if(files.length != 2) res.send(400).json({message: "Invalid Number of Files", data: []})
+    if (files.length != 2)
+      res.send(400).json({ message: "Invalid Number of Files", data: [] });
     const STORIES = 2;
-    for (var i=0; i<STORIES; i++) {
-        console.log(files[i])
+    for (var i = 0; i < STORIES; i++) {
       const path = files[i].path;
       const newPath = await getpath(path);
       urls.push(newPath);
@@ -29,7 +28,7 @@ router.post("/createstory", uploader.array("image"), async (req, res) => {
       data: urls,
     });
   } catch (err) {
-      console.log(err)
+    console.log(err);
     res.status(405).json({
       message: toString(err),
       data: [],
