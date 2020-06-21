@@ -14,23 +14,24 @@ router.post("/createstory", uploader.array("image"), async (req, res) => {
   try {
     const urls = [];
     const files = req.files;
+    console.log(files)
+    if(files.length != 2) res.send(400).json({message: "Invalid Number of Files", data: []})
     const STORIES = 2;
-    var counter = 0;
-    for (const file in files) {
-      const { path } = file;
+    for (var i=0; i<STORIES; i++) {
+        console.log(files[i])
+      const path = files[i].path;
       const newPath = await getpath(path);
       urls.push(newPath);
       fs.unlinkSync(path);
-      counter += 1;
-      if (counter >= STORIES) break;
     }
     res.status(200).json({
       message: "Images Uploaded Successfully",
       data: urls,
     });
   } catch (err) {
+      console.log(err)
     res.status(405).json({
-      message: err,
+      message: toString(err),
       data: [],
     });
   }
