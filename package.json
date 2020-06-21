@@ -1,0 +1,27 @@
+{
+  "name": "insta-story-clone",
+  "version": "1.0.0",
+  "description": "Basic Set of APIs to manage Story Uploads and serve them using pagination",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amandesai01/InstaStoryClone.git"
+  },
+  "keywords": [
+    "Instagram",
+    "Story",
+    "Clone",
+    "APIs",
+    "Backend",
+    "FileUpload"
+  ],
+  "author": "Aman Desai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amandesai01/InstaStoryClone/issues"
+  },
+  "homepage": "https://github.com/amandesai01/InstaStoryClone#readme"
+}
