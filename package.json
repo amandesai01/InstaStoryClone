@@ -4,7 +4,8 @@
   "description": "Basic Set of APIs to manage Story Uploads and serve them using pagination",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run" : "mkdir uploads && node app.js"
   },
   "repository": {
     "type": "git",

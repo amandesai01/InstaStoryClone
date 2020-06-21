@@ -1,11 +1,11 @@
 const express = require('express')
-const routes = require('./routes')
+const stories = require('./StoriesManager/routes')
 
 const app = express()
 
 const PORT = process.env.PORT || 3000
 
-app.use(routes)
+app.use(stories)
 
 app.listen(PORT, () => {
     console.log("Listening to Port " + PORT)
