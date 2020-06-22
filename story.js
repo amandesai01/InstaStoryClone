@@ -45,7 +45,7 @@ router.post("/story", uploader.array("image"), async (req, res) => {
           res.status(405).json({ message: toString(err) })
           return;
         }
-        res.status(200).json({ message: "Story Posted Successfully." })
+        res.status(200).json({ message: "Story Posted Successfully." , id: story._id})
       })
     })
     
