@@ -2,6 +2,7 @@ const router = require("express")();
 const bodyparser = require("body-parser");
 const fs = require("fs");
 const mongoose = require("mongoose")
+const mongo = require("mongodb")
 
 const uploader = require("./upload-manager");
 const cloudinary = require("./cloudinary");
@@ -13,7 +14,7 @@ const MONGODB_URL = "mongodb://localhost:27017/insta"
 
 router.use(bodyparser.urlencoded({ extended: false }));
 router.use(bodyparser.json());
-mongoose.connect(MONGODB_URL)
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 
 router.post("/story", uploader.array("image"), async (req, res) => {
   try {
@@ -30,19 +31,36 @@ router.post("/story", uploader.array("image"), async (req, res) => {
       urls.push(newPath);
       fs.unlinkSync(path);
     }
+    mongo.connect(MONGODB_URL, (err, db) => {
+      if(err){
+        res.status(405).json({ message : toString(err) })
+        return;
+      }
+      var story = {
+        urls: urls,
+        caption : (req.body.caption) ? req.body.caption : "No Caption Provided"
+      }
+      db.collection('stories').insertOne(story, (err, result) => {
+        if(err){
+          res.status(405).json({ message: toString(err) })
+          return;
+        }
+        res.status(200).json({ message: "Story Posted Successfully." })
+      })
+    })
     
   } catch (err) {
     console.log(err);
     res.status(405).json({
       message: toString(err)
     });
-  }
+  } finally {}
 });
 
-router.get('/story', (req, res) => {
-  const page = parseInt(req.body.page);
-  const limit = parseInt(req.body.limit);
-
+router.get('/story', async (req, res) => {
+  try{
+    const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
   const startIndex = (page - 1) * limit;
   const endIndex = (page) * limit;
 
@@ -54,14 +72,18 @@ router.get('/story', (req, res) => {
       limit: limit
     }
   }
-  if(endIndex < SOMELENGTH){
+  if(endIndex){
     results.next = {
       page: page + 1,
       limit: limit
     }
   }
-  
-
+  results.data = await Story.find().limit(limit).skip(startIndex).exec()
+  res.status(200).json(results)
+  } catch(err) {
+    console.log(err);
+    res.status(405).json({message: "Error"})
+  }
 })
 
 module.exports = router;
