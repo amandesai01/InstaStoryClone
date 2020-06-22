@@ -22,3 +22,18 @@ caption: <caption>
 ```
 GET https://localhost:3000/story?limit=<LIMIT>&page=<PAGE>
 ```
+
+#### POST COMMENT:
+```
+POST https://localhost:3000/comment
+BODY:
+{
+    "postid" : <postid on which you want to comment>,
+    "comment" : <comment>
+}
+```
+
+#### GET COMMENT:
+```
+GET https://localhost:300/comment?postid=<postid>
+```
