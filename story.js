@@ -1,7 +1,7 @@
 const router = require("express")();
 const bodyparser = require("body-parser");
 const fs = require("fs");
-const mongo = require("mongodb")
+const mongoose = require("mongoose")
 
 const uploader = require("./upload-manager");
 const cloudinary = require("./cloudinary");
@@ -13,6 +13,7 @@ const MONGODB_URL = "mongodb://localhost:27017/insta"
 
 router.use(bodyparser.urlencoded({ extended: false }));
 router.use(bodyparser.json());
+mongoose.connect(MONGODB_URL)
 
 router.post("/story", uploader.array("image"), async (req, res) => {
   try {
@@ -29,23 +30,7 @@ router.post("/story", uploader.array("image"), async (req, res) => {
       urls.push(newPath);
       fs.unlinkSync(path);
     }
-    mongo.connect(MONGODB_URL, (err, db) => {
-      if(err){
-        res.status(405).json({ message : toString(err) })
-        return;
-      }
-      var story = {
-        urls: urls,
-        caption : (req.body.caption) ? req.body.caption : "No Caption Provided"
-      }
-      db.collection('stories').insertOne(story, (err, result) => {
-        if(err){
-          res.status(405).json({ message: toString(err) })
-          return;
-        }
-        res.status(200).json({ message: "Story Posted Successfully." })
-      })
-    })
+    
   } catch (err) {
     console.log(err);
     res.status(405).json({
