@@ -10,7 +10,7 @@ const cloudinary = require("./cloudinary");
 const Story = require('./StoryModel')
 
 const getpath = async (path) => await cloudinary.uploads(path, "Images");
-const MONGODB_URL = "mongodb://localhost:27017/insta"
+const MONGODB_URL = process.env.MONGO_URL
 
 router.use(bodyparser.urlencoded({ extended: false }));
 router.use(bodyparser.json());
